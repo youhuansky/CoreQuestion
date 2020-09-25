@@ -14,9 +14,14 @@ public class CompletableFutureTest {
 
         // 场景：100个线程，每个线程打印个数字
         List<String> messages = Arrays.asList("asdf", "adsf2", "1234f");
-        List<CompletableFuture<String>> collects = messages.stream().map(msg -> CompletableFuture.completedFuture(msg)
+        List<CompletableFuture<String>> collects = messages.parallelStream().map(msg -> CompletableFuture.completedFuture(msg)
                 .thenApply(msg2 -> {
                     System.out.println(msg2);
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     return msg2.toUpperCase();
                 })).collect(Collectors.toList());
         System.out.println("---------------------------");
@@ -24,9 +29,9 @@ public class CompletableFutureTest {
 
         voidCompletableFuture.thenApply(s -> {
             System.out.println(s);
-            return collects.stream().map(CompletableFuture::join).collect(Collectors.toList());
+            return collects.parallelStream().map(CompletableFuture::join).collect(Collectors.toList());
         }).whenComplete((s, v) -> {
-            System.out.println(s);
+            System.out.println("123231" + s);
         });
 //        voidCompletableFuture.join();
 //        m7_thenApply();

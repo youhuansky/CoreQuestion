@@ -15,20 +15,22 @@ class FooBar {
     Condition condition1 = lock.newCondition();
     Condition condition2 = lock.newCondition();
 
+    boolean flag1 = true;
+
     public void foo(Runnable printFoo) throws InterruptedException {
+        lock.lock();
         try {
-            lock.lock();
             for (int i = 0; i < n; i++) {
+                while (!flag1) {
+                    condition1.await();
+                }
                 // printFoo.run() outputs "foo". Do not change or remove this line.
-
-
-
                 printFoo.run();
 
+                flag1 = false;
                 condition2.signal();
-                condition1.await();
+
             }
-            condition2.signal();
         } finally {
             lock.unlock();
         }
@@ -36,21 +38,20 @@ class FooBar {
     }
 
     public void bar(Runnable printBar) throws InterruptedException {
+        lock.lock();
         try {
-            lock.lock();
             for (int i = 0; i < n; i++) {
                 // printBar.run() outputs "bar". Do not change or remove this line.
-
-
-                condition2.await();
+                while (flag1) {
+                    condition2.await();
+                }
                 printBar.run();
+                flag1 = true;
                 condition1.signal();
             }
-            condition1.signal();
         } finally {
             lock.unlock();
         }
-
     }
 }
 
@@ -58,24 +59,42 @@ public class FooBarTest {
 
     public static void main(String[] args) {
 
-        FooBar fooBar = new FooBar(2);
+        FooBar fooBar = new FooBar(1);
         try {
 
-            fooBar.foo(new Runnable() {
+
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(Thread.currentThread().getName());
+                    try {
+                        fooBar.foo(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.out.print("foo");
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            });
+            }).start();
 
-            fooBar.bar(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(Thread.currentThread().getName());
+                    try {
+                        fooBar.bar(new Runnable() {
+                            @Override
+                            public void run() {
+                                System.out.print("bar");
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            });
-
-        } catch (InterruptedException e) {
+            }).start();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
