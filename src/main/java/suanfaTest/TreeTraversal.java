@@ -158,6 +158,46 @@ public class TreeTraversal {
         System.out.println();
     }
 
+
+    public static void preOrder2(Node root) {
+        if (null != root) {
+            Stack<Node> stack = new Stack<>();
+            stack.push(root);
+            while (!stack.isEmpty()) {
+                root = stack.pop();
+                System.out.print(root.data);
+                if (null != root.rightChild) {
+                    stack.push(root.rightChild);
+                }
+                if (null != root.leftChild) {
+                    stack.push(root.leftChild);
+                }
+            }
+        }
+    }
+
+    public static void postOrder2(Node root) {
+        if (null != root) {
+            Stack<Node> stack = new Stack<>();
+            Stack<Node> stack2 = new Stack<>();
+            stack.push(root);
+            while (!stack.isEmpty()) {
+                root = stack.pop();
+                stack2.push(root);
+                if (null != root.leftChild) {
+                    stack.push(root.leftChild);
+                }
+                if (null != root.rightChild) {
+                    stack.push(root.rightChild);
+                }
+            }
+            while (!stack2.isEmpty()) {
+                System.out.print(stack2.pop().data);
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
         Node node1 = new Node(1);
         Node node2 = new Node(2);
@@ -186,6 +226,11 @@ public class TreeTraversal {
 //        preOrder(node1);
 //        preOrderRight(node1);
 //        postOrderRight(node1);
-        postOrder(node1);
+//        preOrder2(node1);
+//        System.out.println();
+//        preOrderRight(node1);
+        postOrder2(node1);
+        System.out.println();
+        postOrderRight(node1);
     }
 }

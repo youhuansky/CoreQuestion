@@ -59,7 +59,7 @@ public class FooBarTest {
 
     public static void main(String[] args) {
 
-        FooBar fooBar = new FooBar(1);
+        FooBar fooBar = new FooBar(20);
         try {
 
 
@@ -97,6 +97,5 @@ public class FooBarTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }
