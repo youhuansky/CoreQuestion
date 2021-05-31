@@ -8,6 +8,10 @@ import java.util.concurrent.CyclicBarrier;
 
 public class YouhuanTest {
 
+
+    public static void main(String[] args) {
+        System.out.println("asdsadasd");
+    }
     @Test
     public void test6() {
 
