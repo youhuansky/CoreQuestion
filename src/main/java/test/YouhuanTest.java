@@ -2,7 +2,10 @@ package test;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
@@ -12,6 +15,19 @@ public class YouhuanTest {
     public static void main(String[] args) {
         System.out.println("asdsadasd");
     }
+
+    public int findRepeatNumber(int[] nums) {
+        Set<Integer> integers = new HashSet();
+        for (int num : nums) {
+            if (!integers.contains(num)) {
+                integers.add(num);
+            } else {
+                return num;
+            }
+        }
+        return 0;
+    }
+
     @Test
     public void test6() {
 
